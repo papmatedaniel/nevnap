@@ -36,7 +36,7 @@
                     
                     if (isset($res['hiba'])) {
                         echo "<p class='error'>Sajnos " . htmlspecialchars($res['hiba']) . "</p>"; //[cite: 215, 310]
-                    } elseif (isset($res['mintal'])) {
+                    } elseif (isset($res['minta1'])) {
                         // 7. feladat: Útmutatás, ha nincs paraméter [cite: 212, 213, 308]
                         echo "<p class='info'>Használat: adjon meg egy nevet (pl. " . htmlspecialchars($res['minta2']) . ") vagy dátumot!</p>";
                     } else {
