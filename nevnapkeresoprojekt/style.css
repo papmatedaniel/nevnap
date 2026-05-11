@@ -1,0 +1,29 @@
+/* Alapbeállítások - Reszponzív betűméret [cite: 227] */
+body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f4f4; line-height: 1.6; }
+
+.main-container {
+    display: flex;
+    flex-direction: row; /* Széles képernyőn egymás mellett [cite: 225] */
+    max-width: 1000px;
+    margin: 50px auto; /* Nagyobb margó széles képernyőn [cite: 226] */
+    gap: 20px;
+    padding: 20px;
+}
+
+section { background: white; padding: 30px; border-radius: 8px; flex: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+.divider { text-align: center; margin: 20px 0; font-weight: bold; color: #888; }
+input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; margin-top: 20px; cursor: pointer; border-radius: 4px; }
+
+/* Mobil nézet  */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column; /* Álló tájolásnál egymás alatt [cite: 225] */
+        margin: 10px; /* Kisebb margó [cite: 226] */
+    }
+    section { padding: 15px; }
+}
+
+.error { color: #721c24; background: #f8d7da; padding: 10px; border-radius: 4px; }
+.success { border-left: 5px solid #28a745; padding-left: 15px; }
