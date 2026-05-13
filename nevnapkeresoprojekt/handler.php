@@ -7,11 +7,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Az API végpontja [cite: 201]
     $apiUrl = "http://localhost/nevnapkeresoprojekt/api/nevnapok/";
     $params = "";
+    $mod = "";
 
     if (!empty($nev)) {
         $params = "?nev=" . urlencode($nev);
+        $mod = "nev";
     } elseif (!empty($nap)) {
         $params = "?nap=" . urlencode($nap);
+        $mod = "nap";
     }
 
     // API hívás végrehajtása
@@ -25,6 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // Visszaküldés a főoldalra az adatokkal
-    header("Location: index.php?data=" . urlencode($response));
+    header("Location: index.php?data=" . urlencode($response) . "&mod=" . $mod);
     exit;
 }
