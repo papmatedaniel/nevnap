@@ -43,7 +43,7 @@
                         echo "<div class='success'>";
                         
                         // Ha a felhasználó nevet írt be a formba, akkor a dátum a lényeg
-                        if (!empty($_POST['nev'])) { 
+                        if ($res['mod'] == "nev") { 
                             echo "<p>A keresett név dátuma: <strong>" . htmlspecialchars($res['datum']) . "</strong></p>"; //[cite: 237, 346]
                         } 
                         // Ha dátumot írt be, akkor a nevek a lényegesek
