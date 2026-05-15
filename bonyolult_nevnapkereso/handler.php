@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nev = $_POST['nev'] ?? '';
 
     // Az API végpontja [cite: 201]
-    $apiUrl = "http://localhost/nevnapkeresoprojekt/api/nevnapok/";
+    $apiUrl = "http://localhost/bonyolult_nevnapkereso/api/";
     $params = "";
     $mod = "";
 
