@@ -6,16 +6,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
     $nev = $_POST["nev"] ?? '';
-    $datum = $_POST["datum"] ?? '';
+    $datum = $_POST["nap"] ?? '';
 
-    $apiurl = "http://localhost/kozepes_nevnapkereso/api/";
+    $apiurl = "http://localhost/nevnap/api/";
     $param = "";
 
     if (!empty($nev)){
         $param = "?nev=" . $nev;
     }
     elseif(!empty($datum)){
-        $param = "?datum=" . $datum;
+        $param = "?nap=" . $datum;
     }
 
 

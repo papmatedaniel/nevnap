@@ -12,7 +12,6 @@ if (!$db){
 
 mysqli_set_charset($db, "utf8mb4");
 
-$tomb = [];
 $honapok = ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
 
 if (!empty($_GET["nev"])) {
@@ -23,25 +22,24 @@ if (!empty($_GET["nev"])) {
         // {"datum":"április 30.","nevnap1":"Katalin","nevnap2":"Kitti"}
         
         $valasz = mysqli_fetch_assoc($lekerdezes);
-        $tomb = [
+        print json_encode([
             "datum" => $honapok[$valasz["ho"]-1] . " " . $valasz["nap"] . ".",
             "nevnap1" => $valasz["nev1"],
             "nevnap2" => $valasz["nev2"]
-        ];
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
     }
     else{
-        $tomb = [
-            "hiba" => "nincs találat"
-        ];
+        print json_encode(["hiba" => "nincs találat"], JSON_UNESCAPED_UNICODE);
+        exit;
     }
 }
 
-elseif (!empty($_GET["datum"])) {
-    $datum = explode("-", $_GET["datum"]);
+elseif (!empty($_GET["nap"])) {
+    $datum = explode("-", $_GET["nap"]);
     if (count($datum) < 2){
-        $tomb = [
-            "hiba" => "nincs találat"
-        ];
+        print json_encode(["hiba" => "nincs találat"], JSON_UNESCAPED_UNICODE);
+        exit;
     }
     else{
         $honap = $datum[0];
@@ -52,28 +50,27 @@ elseif (!empty($_GET["datum"])) {
             // {"datum":"április 30.","nevnap1":"Katalin","nevnap2":"Kitti"}
             
             $valasz = mysqli_fetch_assoc($lekerdezes);
-            $tomb = [
+            print json_encode([
                 "datum" => $honapok[$valasz["ho"]-1] . " " . $valasz["nap"] . ".",
                 "nevnap1" => $valasz["nev1"],
                 "nevnap2" => $valasz["nev2"]
-            ];
+            ], JSON_UNESCAPED_UNICODE);
+            exit;
         }
         else{
-            $tomb = [
-                "hiba" => "nincs találat"
-            ];
+            print json_encode(["hiba" => "nincs találat"], JSON_UNESCAPED_UNICODE);
+            exit;
         }
     }
 }
 else{
     // {"minta1":"/?nap=12-31","minta2":"/?nev=Szilveszter"}
-    $tomb = [
+    print json_encode([
         "minta1" => "/?nap=12-31",
         "minta2" => "/?nev=Szilveszter"
-    ];
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
 }
-
-print json_encode($tomb, JSON_UNESCAPED_UNICODE);
 
 mysqli_close($db);
 ?>

@@ -18,8 +18,8 @@ session_start();
 
         <br>
 
-        <label for="datum">Add meg a dátumot:</label>
-        <input type="text" name="datum" id="datum" placeholder="datum">
+        <label for="nap">Add meg a dátumot:</label>
+        <input type="text" name="nap" id="nap" placeholder="nap">
         
 
         <br>

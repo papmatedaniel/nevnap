@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nev = $_POST['nev'] ?? '';
 
     // Az API végpontja [cite: 201]
-    $apiUrl = "http://localhost/bonyolult_nevnapkereso/api/";
+    $apiUrl = "http://localhost/nevnap/api/";
     $params = "";
     $mod = "";
 
@@ -18,13 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // API hívás végrehajtása
-    $response = @file_get_contents($apiUrl . $params);
-
-    // Ha az API nem elérhető, használjuk a mintát [cite: 230, 231]
-    if ($response === FALSE) {
-        $backupUrl = "https://infojegyzet.hu/apiminta/nevnapok/";
-        $response = file_get_contents($backupUrl . $params);
-    }
+    $response = file_get_contents($apiUrl . $params);
 
 
     // Visszaküldés a főoldalra az adatokkal

@@ -1,6 +1,7 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 
+
 // Adatbázis kapcsolat felépítése [cite: 302]
 $conn = new mysqli("localhost", "root", "", "nevnapok");
 $conn->set_charset("utf8");
@@ -25,12 +26,12 @@ if ($nap_param) {
     $nap = $reszek[1];
 
     // Biztonságos lekérdezés a ho és nap oszlopokra [cite: 304, 312]
-    $stmt = $conn->prepare("SELECT ho, nap, nev1, nev2 FROM nevnapok WHERE ho = ? AND nap = ?");
+    $stmt = $conn->prepare("SELECT ho, nap, nev1, nev2 FROM nevnap WHERE ho = ? AND nap = ?");
     $stmt->bind_param("ii", $ho, $nap); // "ii" jelentése: két integer (egész szám)
 } 
 // 6. Keresés név alapján [cite: 212, 213]
 else if ($nev_param) {
-    $stmt = $conn->prepare("SELECT ho, nap, nev1, nev2 FROM nevnapok WHERE nev1 = ? OR nev2 = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT ho, nap, nev1, nev2 FROM nevnap WHERE nev1 = ? OR nev2 = ? LIMIT 1");
     $stmt->bind_param("ss", $nev_param, $nev_param); // "ss" jelentése: két string (szöveg)
 }
 

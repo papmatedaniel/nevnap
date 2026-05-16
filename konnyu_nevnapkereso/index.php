@@ -3,16 +3,16 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $nev = $_POST["nev"] ?? '';
-    $datum = $_POST["datum"] ?? '';
+    $datum = $_POST["nap"] ?? '';
 
-    $apiurl = "http://localhost/konnyu_nevnapkereso/api/";
+    $apiurl = "http://localhost/nevnap/api/";
     $param = "";
 
     if (!empty($nev)){
         $param = "?nev=" . $nev;
     }
     elseif(!empty($datum)){
-        $param = "?datum=" . $datum;
+        $param = "?nap=" . $datum;
     }
 
     $visszakapottertek = file_get_contents($apiurl . $param);
@@ -54,8 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         <label for="nev">Add meg a nevet:</label>
         <input type="text" name="nev" id="nev" placeholder="nev">
         <br>
-        <label for="datum">Add meg a dátumot:</label>
-        <input type="text" name="datum" id="datum" placeholder="datum">
+        <label for="nap">Add meg a dátumot:</label>
+        <input type="text" name="nap" id="nap" placeholder="nap">
         <br>
         <input type="submit" value="Leadás">
     </form>

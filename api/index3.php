@@ -23,25 +23,19 @@ if (!empty($_GET["nev"])) {
         // {"datum":"április 30.","nevnap1":"Katalin","nevnap2":"Kitti"}
         
         $valasz = mysqli_fetch_assoc($lekerdezes);
-        $tomb = [
-            "datum" => $honapok[$valasz["ho"]-1] . " " . $valasz["nap"] . ".",
-            "nevnap1" => $valasz["nev1"],
-            "nevnap2" => $valasz["nev2"]
-        ];
+        $tomb["datum"] = $honapok[$valasz["ho"]-1] . " " . $valasz["nap"] . ".";
+        $tomb["nevnap1"] = $valasz["nev1"];
+        $tomb["nevnap2"] = $valasz["nev2"];
     }
     else{
-        $tomb = [
-            "hiba" => "nincs találat"
-        ];
+        $tomb["hiba"] = "nincs találat";
     }
 }
 
-elseif (!empty($_GET["datum"])) {
-    $datum = explode("-", $_GET["datum"]);
+elseif (!empty($_GET["nap"])) {
+    $datum = explode("-", $_GET["nap"]);
     if (count($datum) < 2){
-        $tomb = [
-            "hiba" => "nincs találat"
-        ];
+        $tomb["hiba"] = "nincs találat";
     }
     else{
         $honap = $datum[0];
@@ -52,25 +46,19 @@ elseif (!empty($_GET["datum"])) {
             // {"datum":"április 30.","nevnap1":"Katalin","nevnap2":"Kitti"}
             
             $valasz = mysqli_fetch_assoc($lekerdezes);
-            $tomb = [
-                "datum" => $honapok[$valasz["ho"]-1] . " " . $valasz["nap"] . ".",
-                "nevnap1" => $valasz["nev1"],
-                "nevnap2" => $valasz["nev2"]
-            ];
+            $tomb["datum"] = $honapok[$valasz["ho"]-1] . " " . $valasz["nap"] . ".";
+            $tomb["nevnap1"] = $valasz["nev1"];
+            $tomb["nevnap2"] = $valasz["nev2"];
         }
         else{
-            $tomb = [
-                "hiba" => "nincs találat"
-            ];
+            $tomb["hiba"] = "nincs találat";
         }
     }
 }
 else{
     // {"minta1":"/?nap=12-31","minta2":"/?nev=Szilveszter"}
-    $tomb = [
-        "minta1" => "/?nap=12-31",
-        "minta2" => "/?nev=Szilveszter"
-    ];
+    $tomb["minta1"] = "/?nap=12-31";
+    $tomb["minta2"] = "/?nev=Szilveszter";
 }
 
 print json_encode($tomb, JSON_UNESCAPED_UNICODE);

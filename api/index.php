@@ -36,8 +36,8 @@ if (!empty($_GET["nev"])) {
     }
 }
 
-elseif (!empty($_GET["datum"])) {
-    $datum = explode("-", $_GET["datum"]);
+elseif (!empty($_GET["nap"])) {
+    $datum = explode("-", $_GET["nap"]);
     if (count($datum) < 2){
         $tomb = [
             "hiba" => "nincs találat"
