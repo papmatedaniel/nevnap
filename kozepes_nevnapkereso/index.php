@@ -33,6 +33,7 @@ session_start();
             if (isset($_SESSION["valasz"])){
                 $tomb = $_SESSION["valasz"];
                 // var_dump($tomb);
+                unset($_SESSION['valasz']); //ne felejtsük el az unsetet, miután a sessionbe lévő adatot kimentettük/felhasználtuk.
 
                 if (isset($tomb["minta1"])) {
                     echo "<strong>minta1:</strong> " . htmlspecialchars($tomb["minta1"]);
@@ -51,7 +52,6 @@ session_start();
                     echo "<br>";
                     echo "<strong>nevnap2:</strong> " . (!empty($tomb["nevnap2"]) ? htmlspecialchars($tomb["nevnap2"]) : "nincs");
                 }
-                unset($_SESSION['valasz']);
             }
 
         ?>
