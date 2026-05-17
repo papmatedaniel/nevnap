@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $_SESSION["valasz"] = json_decode($visszakapottertek, true);
 
     header("location: index.php?lefutotte=igen");
+    exit;
 }
 
 ?>
