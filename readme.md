@@ -38,3 +38,6 @@ Itt található a névnapkereső API végpontjainak megvalósítása. Funkcioná
 ### 5. `1_filos_nevnapkereso` mappa
 * **Kialakítás:** Ebben a verzióban a névnapkereső API-t már nem mi magunk biztosítjuk lokálisan, hanem egy **külső, harmadik fél által üzemeltetett API-ra** támaszkodunk.
 * **Technikai részlet:** Az egyszerűbb `file_get_contents()` függvény helyett **cURL** használatával történik a külső API válaszának lekérése és feldolgozása. Ennek oka, hogy a `file_get_contents()` távoli erőforrások esetén gyakran szerverkonfigurációs korlátokba ütközhet (pl. `allow_url_fopen` tiltása), míg a cURL robusztus és megbízható megoldást nyújt külső kapcsolatok kezelésekor.
+
+### Az alábbi linken érhető el a feladat forrása:
+**https://infojegyzet.hu/vizsgafeladatok/szoftverfejleszto-projektfeladat/#:~:text=tan%C3%B3r%C3%A1k-,Szoftverfejleszt%C5%91,2022**
