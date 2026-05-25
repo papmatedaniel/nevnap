@@ -1,0 +1,453 @@
+1. Hibakezelés:
+A php-ban sajnos külön be kell kapcsolnunk a hibakezelést, mert alapvetően csak 500-as hibakódot dob minden hibára.
+
+A) Minden hibát és noticet/figyelmeztetést is kiirat
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+B) Csak a végzetes hibákat okozó hibákat iratja ki
+// error_reporting(E_ERROR | E_PARSE);
+// ini_set('display_errors', 1);
+
+B verziót javaslom mindenkinek. Ha így is 500-as hibát kapsz, akkor valahol lehagytál egy pontos vesszőt, vagy egy olyan alap kulcsszó nevét gépelted el, mint az if, else, for, while vagy valami függvény nevét elgépelted(a legtöbb függvény sárga színű, szóval ha lilának jelzi ki a vs code, akkor valószínűleg elgépelted).
+
+2. Gyakori hibák:
+Lehagyjuk a DOLLÁR$$$$$ jelet és a PONTOSVESSZŐT;;;;
+Ezért minden változó neve előtt rakd ki a dollár jelet, és a sor végén a pontos vesszőt.
+
+3. Fontosabb alapfüggvények:
+//program leállítás:
+exit; //lezárja a program futását
+die("lehalt a program")  //lezárja a program futását és hibaüzenetet is rakhatunk belé
+
+
+//Kiiratás
+echo "szöveg" vagy echo $alma  //kiirat egy szöveget vagy változó értéket
+print "szöveg" vagy print $alma //kiirat egy szöveget vagy változó értéket
+print_r($tomb) //kiirat egy egész listát, amit a sima printel nem tudunk megcsinálni
+var_dump($tomb) //minden egyes adatot kiír a listáról, sokkal részletesebb mint a print_r, csak hibakezeléshez használjuk
+
+
+//Változó érték vizsgálat
+isset($valami)  //ha a változó létezik és az értéke nem null, akkor True-t ad vissza
+empty($valami)  //ha a változó létezik és van e értelmes adata, pl egy tömben van e adat, vagy egy szöveg nem csak egy üres string
+
+
+//szöveges stringek
+explode(" ", $szoveg) //a szöveget az elválasztó karakter alapján darabolja, azaz jelenleg a spacek mentén
+strlen($szoveg) //vissza adja a szöveg hosszát
+$osszefuzottSzoveg = "alma" . "fa" //a . az kettő szöveget tud összefűzni egy szöveggé
+
+//tömbök
+A) hogy csinálsz tömböt?
+
+$array1 = array("foo", "bar", "hello", "world");
+$array2 = array();
+$array3 = ["foo", "bar", "hello", "world"];
+$array4 = [];
+
+//lehet [] és array() kulcsszóval tömböt csinálni. lehet üres tömböt csinálni és lehet egyből értékeket is belerakni a tömbe
+
+
+//Hogy érjük el a tömb értékét?
+//Ennél a tömb típusnál csak az indexek alapján lehet elérni, szóval a legelső elemet a 0-ás indexel érjük el
+echo $array1[0] // a kimenet az a foo lesz
+echo $array3[2] // a kimenet a hello lesz
+
+
+B) ASSZOCIATÍV TÖMB, avagy szótár
+$array1 = array(
+    "foo" => "bar",
+    "bar" => "foo",
+);
+
+// Using the short array syntax
+$array2 = [
+    "foo" => "bar",
+    "bar" => "foo",
+];
+
+
+//ez annyiban különbözik az előző tömb típustól, hogy az értékeket az indexek alapján értük el, itt pedig az index helyett az általunk beállított kulcsal érjük el az értéket.
+
+echo $array2["foo"]  //kimenet a bar lesz
+
+
+
+
+C) Fontosabb tömbös függvények
+//Elem hozzáadása
+$array1 = ["foo", "bar", "hello", "world"];
+);
+array_push($array1, "apple"); // az apple elemet hozzáadtuk az array1 tömbhöz
+
+
+//szótárhoz új kulcs érték hozzáadása
+$array1 = array(
+    "foo" => "bar",
+    "bar" => "foo",
+);
+$array1["city"] = "Budapest";   // új elem hozzáadása
+
+
+
+//utolsó elem eltávolítása
+array_pop($array1)
+
+//tömb elemszáma:
+count($array)
+
+
+
+4. APIZÁS
+header('Content-Type: application/json; charset=utf-8');  //ez kötelező az api elejére
+
+
+//PHP - ADATBÁZIS kapcsolat
+
+$db = mysqli_connect("localhost", "root", "", "tablanev"); //szerver, felhasználónév, jelszó, táblanév
+
+
+if (!db){
+    die("nem jó az adatbázis kapcsolat);
+}
+
+mysqli_set_charset($con,"utf8mb4"); //Karakterkódolás beállítása
+
+//Api paraméterének vizsgálata
+
+API paraméterének vizsgálata (Változatok), akár handlerben is
+A) A "Modern PHP" (Null Coalescing operátor)
+A ?? operátorral alapértelmezett értéket adunk a változónak, ha az hiányzik.
+Használata: Amikor mindenképpen változóba akarjuk menteni az adatot, hibaüzenetek elkerülésével.
+Példa: Opcionális beállítások (pl. nyelvválasztás, rendezési szempont).
+
+röviden:
+változóba akarod menteni a bemenetet
+és nem tudod, hogy létezik-e
+és később többször használod
+
+$nev = $_GET["nev"] ?? null;
+$datum = $_GET["datum"] ?? null;
+
+if ($nev === null && $datum === null) { /* Hiba: nincs paraméter */ }
+elseif ($nev !== null && $datum !== null) { /* Hiba: túl sok paraméter */ }
+elseif ($nev !== null) { /* Keresés név alapján */ }
+elseif ($datum !== null) { /* Keresés dátum alapján */ }
+Figyelem: Az üres stringet (?nev=) átengedi, mert az nem null!
+
+
+B) Az "Alap" (Hagyományos isset)
+A klasszikus módszer, ami csak a létezést ellenőrzi.
+Használata: Checkboxoknál, gomboknál, vagy ahol a 0 is érvényes adat (pl. pontszám).
+Példa: if (isset($_POST['mentes_gomb'])) { ... }
+
+if (!isset($_GET["nev"]) && !isset($_GET["datum"])) { ... }
+elseif (isset($_GET["nev"]) && isset($_GET["datum"])) { ... }
+elseif (isset($_GET["nev"])) {
+    $nev = $_GET["nev"];
+}
+elseif (isset($_GET["datum"])) {
+    $datum = $_GET["datum"];
+}
+
+
+C) A "Flag-es" megoldás
+Logikai segédváltozókat (igaz/hamis) használunk az átláthatóságért.
+Használata: Bonyolultabb feltételeknél, hogy ne legyen túl hosszú az if sora.
+Példa: Jogosultságok és állapotok együttes vizsgálata.
+
+$nap_set = isset($_GET['nap']);
+$nev_set = isset($_GET['nev']);
+
+if ($nap_set && $nev_set) { ... } // Mindkettő be van állítva
+if (!$nap_set && !$nev_set) { ... } // Egyik sem
+
+if ($nap_set) {
+    $datum = $_GET["nap"];
+} else {
+    $nev = $_GET["nev"];
+}
+
+
+D) A "Svájci Bicska" (!empty) – LEGJOBB SZÖVEGES BACKENDHEZ, APIHOZ
+Egyszerre nézi, hogy létezik-e a paraméter ÉS van-e benne tartalom.
+Használata: Szöveges keresésnél (név, dátum, email), ahol az üres mező nem adat.
+Példa: Keresőmezők, kötelezően kitöltendő szöveges adatok.
+
+if (!empty($_GET['nev'])) {
+    // Csak akkor fut le, ha a kulcs létezik ÉS nem üres string ("")
+    $nev = $_GET['nev'];
+} 
+elseif (!empty($_GET['nap'])) {
+    $nap = $_GET['nap'];
+} 
+else {
+    // Üresen hagyott mezők vagy hiányzó paraméterek
+}
+
+
+E) A "Lusta Profi" (Rövidített kiértékelés)
+Kombinálja az alapértelmezett értéket a PHP logikai rugalmasságával.
+Használata: Gyors szűrésre SQL lekérdezések előtt.
+Példa: API kereső funkció.
+
+$nev = $_GET['nev'] ?? ""; // Ha hiányzik, legyen üres string
+
+if ($nev) { 
+    // Mivel az üres string "" logikailag FALSE, ez csak akkor 
+    // igaz, ha van benne érdemi tartalom.
+    $tisztitott_nev = mysqli_real_escape_string($db, $nev);
+}
+
+
+
+Gyors döntési segédlet:
+Szöveget (név, dátum) vársz? → Használd a D vagy E verziót (!empty), hogy kiszűrd az üresen küldött kereséseket.
+Számot vársz (ahol a 0 is érték)? → Használd az A vagy B verziót (isset), mert az empty a nullát is hibának látná.
+Gombot vagy checkboxot vizsgálsz? → Használd a B verziót (isset).
+
+
+FONTOS SZABÁLY:
+Ha először letároljuk az adatot és utána ellenőrzünk -> kell ?? ''
+Ha először ellenőrizzük az adatot és utána tároljuk le az adatot -> nem kell ?? ''
+
+
+1) Handler (űrlapfeldolgozó)
+$nev = $_POST['nev'] ?? '';
+if (!empty($nev)) { ... }
+
+2) API
+
+if (!empty($_GET['nev'])) {
+    $nev = $_GET['nev'];
+}
+
+TÖBBSZÖRI használatnál 1 verzió, ha csak egyszer használjuk elég a 2 verzió
+
+
+
+
+// Adatbázisban keresés
+A)
+$lekerdezes = mysqli_query($db, "SELECT * FROM tabla"); // minden adatot lekérdez
+
+B) Ha az api paraméterét kell összehasonlítani
+
+$van_e_pizza = isset($_GET['pizza']);
+if ($van_e_pizza){
+    $pizza = $_GET['pizza'];
+
+    lekerdezes = mysqli_query($db, "SELECT pizzaar FROM pizzak WHERE pizzanev = '$pizza'");
+
+}
+
+//Adat feldolgozás
+//A mysqli_query egy adatbázis objektumot ad vissza, amit csak dekódolva tudunk használni
+//Erre több megoldásunk is van.
+
+A) 
+
+mysqli_fetch_assoc($lekerdezes);
+//Ez a mysqli_fetch_assoc() mindig csak 1 sort olvas ki a beérkező adatsorból. Ha 5 sor adatot kapunk vissza az a lekérdezéssel, amivel 5x kell meghívnunk, hogy megkapjuk az összes sort.
+
+$echo mysqli_fetch_assoc($lekerdezes);  //első sor
+$echo mysqli_fetch_assoc($lekerdezes);  //második sor
+$echo mysqli_fetch_assoc($lekerdezes);  //harmadik sor
+$echo mysqli_fetch_assoc($lekerdezes);  //negyedik sor
+$echo mysqli_fetch_assoc($lekerdezes);  //ötödik sor
+
+B)
+//Az egyenkénti meghívása a mysqli_fetch_assoc eléggé rossz megoldás, ha sok adatunk van, ezért ehelyett egy while ciklust használunk.
+
+
+while ($sor = mysqli_fetch_assoc($lekerdezes)) {
+    echo "<pre>";
+    var_dump($sor);
+    echo "</pre>";
+    echo "<br>";
+    echo $sor["pizzaar"]; // ha pontosan tudjuk melyik adatot akarjuk kiiratni a sorból, a lekérdezés sql utasításába látjuk a selectbe lévő oszlopokat, azokat lehet itt a sornál hasznánli
+
+}
+
+
+C)
+//Ha nem csak egyszer van szükségünk az adatokra, hanem elakarjuk tárolni későbbi feldolgozásra
+$adatok = [];
+
+while ($sor = mysqli_fetch_assoc($lekerdezes)) {
+    $adatok[] = $sor;
+}
+
+foreach ($lekerdezes as $sor) {
+    echo $sor['pizzaar'];
+}
+
+
+D)
+//Ha a whilos megoldás nem tetszik, akkor foreachot is tudunk használni, de az picit trükkösebb
+
+$adatok = mysqli_fetch_all($osszeadat, MYSQLI_ASSOC); //EZ egyben lekéri az összes adatot, szemben a mysqli_fetch_assoc ami egyszerre csak 1 sort kérdez le
+
+
+foreach ($adatok as $sor) {
+    echo $sor['pizzaar'];
+}
+
+//BÓNUSZ: hány sort kérdeztünk le az adatbázisból?:
+mysqli_num_rows($sorok); //query után használják, mielőtt feldolgoznák az adatot, megnéznik hogy van e egyáltalán mit feldolgozni
+
+mysqli_num_rows($sorok) > 0;//legalább 1 sor adatunk van e 
+
+
+
+//API VÁLASZ
+az api egy jsonnel tér vissza
+
+print json_encode($tomb) // vissza adja a jsonné alakított tömböt
+print json_encode($tomb, JSON_UNESCAPED_UNICODE) // egy fokkal elegánsabb megoldás, ékezetes betűket is visszaad
+
+
+//JSON DEKÓDOLÁS:
+$data = json_decode($json, true); // true = asszociatív tömbé alakítja a json-t
+
+
+
+//URL KÓDOLÁS
+
+urlencode()  //átalakítja a szöveget úgy hogy a speciális karakterek ne okozzanak gondot a linkben
+    ha te építesz URL-t
+    ha átirányítasz (header("Location: ..."))
+    ha API-t hívsz PHP-ból
+
+$params = "?nev=" . urlencode($nev);
+
+
+//URL VISSZAKÓDOLÁS
+urldecode() // ha valahol urlencode() használtuk, akkor visszaalakításnál 
+$json = urldecode($_GET['data']);
+
+
+
+
+5. BACKAND SZABÁLYOK:
+Ha csak egyszer használod a bemenetet → ne tárold le.
+Ha többször → tárold le ?? ''‑val.
+API-ban → !empty() a legjobb.
+Handlerben → ?? '' a legjobb.
+URL-ben → mindig urlencode().
+JSON-nál → mindig json_decode(..., true).
+
+
+6. Egyébb függvények.
+
+A)
+htmlspecialchars("valami") // biztonságosan megjeleníthetővé tegye a HTML‑ben a felhasználói bemenetet: minden olyan karaktert, amit a böngésző HTML‑nek értelmezne, ártalmatlan szöveggé alakít
+//Mikor?
+Ha bármilyen felhasználói bemenetet (űrlap, URL paraméter, adatbázisból jövő adat) HTML‑ben jelenítesz meg.
+
+
+B) HEADER() használata
+
+1. Content-Type beállítása
+Mit csinál?  
+Megmondja a böngészőnek, milyen formátumú adatot küldesz vissza.
+header("Content-Type: application/json"); //egy jsont fog vissza adni a böngésző
+
+
+2. Átirányítás
+Mit csinál? A böngészőt másik URL-re küldi.
+header("Location: /login.php"); //a login.php-ra 
+
+3. Adat/információ illesztés az url-be
+Mit csinál? Valamennyi nem szenzitív információt az url paramétereibe belerakhat
+header("Location: /view.php?x=123");
+
+
+
+7. GET és POST közötti különbségek.
+
+A) $_GET szuperglobális változó
+
+    Hogyan működik? AZ adatokat az URL címen keresztül küldi el a szervernek. Pl index.phpnev=Mate&na=05-16
+    Hogyan tárolódik le? A PHP automatikusan egy asszociatív tömbbe(szótárba) tpakolja az URL-be kapott kulcs-érték     párokat, amit a $GET globális tömbbel érhetsz el, pl $_GET["nev"]
+
+
+
+    Mikor használjuk?:
+        - Adatok lekérésére, keresésre, szűrésre
+        - API-k esetében a végontok paraméterezésére.
+        - Könyvjelzőknél(mivel a paraméterek benne maradnak a linkben)
+
+   Hátránya: Nem biztonságos szenzitív adatokra (jelszó, bankkártya), mert az adatok látszódnak a böngészési előzményekben és a szervernaplókban. Az URL hossza ráadásul korlátozott (böngészőtől függően kb. 2000 karakter).
+
+    
+
+B) $_POST szuperglobális változó
+
+    Hogyan működik? AZ adatokat, rejtve a HTTP kérés törzsében (body) küldi el. Az URL-ben semmi sem látszódik belőle.
+    Hogyan tárolódik le? A PHP a háttérben érkező adatokat a $_POST asszociatív tömbbe helyezi el pl $POST["nev"]
+
+    Mikor használjuk?
+        - Adatok létrehozásakor, módosításakor, törlésekor pl regisztráció, bejelentkezés, új fórumposzt, bármilyen <form> adat küldés/feldolgozásnál
+
+        -Fájlok feltöltésekor.
+        - Nagy mennyiségű szöveg beküldésénél(nincs szigorú méretkorlát mint a GET-nél)
+
+    Hátránya: Nem lehet közvetlenül könyvjelzőbe menteni az állapotot, és az oldal frissítésekor a böngésző felugró ablakban figyelmzteti a felhasználót az adatok újraküldésére. 
+
+
+
+
+8. SESSIONS kezelés
+Állapotmentésre, két egymás utáni oldalletöltésnél a szerver nem tudja, hogy ugyanaz a felhasználó kattint-e. Erre nyújt megoldást a session.
+
+A) Működései elv)
+Amikor elindítasz egy session-t, a PHP legenerál egy egyedi azonosítót (Session ID), amit elment a felhasználó böngészőjébe egy sütiben (cookie). A szerver oldalon pedig fenntart egy fájlt ehhez az azonosítóhoz, amiben az adatokat tárolja.
+
+
+B) Legfontosabb szabályok és függvények
+
+    - Munkamenet indítása:
+    session_start();
+        FONTOS BACKEND SZABÁLY: Ezt a függvényt minden egyes olyan fájl legtetején meg kell hívni, ahol használni akarod a munkamenet adatait. Semmilyen HTML kód, de még egy üres karakter vagy echo sem előzheti meg, különben hibaüzenetet kapsz!
+
+    - Adat eltárolása és elérése:
+    A $_SESSION szintén egy asszociatív tömb, ami az oldal elhagyása vagy bezárása után is megőrzi az értékét:
+
+    $_SESSION["valasz"] = $tomb; // Adat mentése (pl. a handler.php-ban)
+    $adat = $_SESSION["valasz"]; // Adat kiolvasása (pl. az index.php-ban)
+
+
+    - Adat törlése (Unset):
+    Ha egy adatot csak egyszer szeretnél megmutatni (például egy sikeres beküldési üzenetet vagy API választ), a kiolvasás után azonnal töröld ki, hogy ne ragadjon be a memóriába a következő oldalfrissítéskor:
+    PHP
+
+    unset($_SESSION['valasz']); // Csak ezt a konkrét kulcsot törli
+
+
+9. A $_SERVER szuperglobális változó
+
+A $_SERVER egy olyan beépített tömb, amit a webszerver (pl. Apache) tölt fel információkkal. A szerver környezetéről, a szkript futási helyéről és a beérkező kérésről ad infót.
+
+    Kérési metódus vizsgálata:
+    Gyakran használjuk arra, hogy ellenőrizzük, az űrlap felől érkezett-e a kérés:
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Csak akkor fut le, ha az űrlapot POST-tal küldték be
+    }
+
+
+
+10. API hívás, adat átadás, feldolgozás
+
+A) Biztonságos értékadás és URL felépítés (A handler.php logikája)
+$visszakapottertek = file_get_contents($apiurl . $param);
+
+file_get_contents("URL")
+
+    Mit csinál: Eredetileg helyi fájlok beolvasására szolgál, de ha egy teljes URL-t adsz meg neki, akkor képes végrehajtani egy HTTP GET kérést a megadott címre, és a kapott választ (például az API által visszaadott JSON stringet) egy szöveges változóba menti.
+
+
+
+
