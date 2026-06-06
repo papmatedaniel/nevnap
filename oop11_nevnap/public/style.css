@@ -1,0 +1,37 @@
+/* --- ALAPBEÁLLÍTÁSOK (MOBIL / ÁLLÓ TÁJOLÁS) --- */
+body {
+    font-family: sans-serif;
+    box-sizing: border-box;
+    
+    /* Álló tájolás: kisebb margó és kisebb, de jól olvasható betűméret */
+    margin: 15px;
+    font-size: 16px; 
+
+    /* Flexbox az elemek elrendezéséhez */
+    display: flex;
+    flex-direction: column; /* Álló tájolás: egymás ALATT vannak a tartalmak */
+    gap: 20px;
+}
+
+form, #eredmeny {
+    width: 100%;
+}
+
+
+/* --- MÉDIA LEKÉRDEZÉS (ASZTALI / SZÉLES KÉPERNYŐ) --- */
+/* Általában 768px felett beszélünk asztali/széles képernyőről */
+@media (min-width: 768px) {
+    body {
+        /* Széles képernyő: egymás MELLETT jelennek meg a tartalmak */
+        flex-direction: row; 
+        align-items: flex-start;
+
+        /* Széles képernyő: nagyobb margó és nagyobb betűméret */
+        margin: 50px;
+        font-size: 20px; 
+    }
+
+    form, #eredmeny {
+        flex: 1; /* Egyenlő szélességben osztoznak egymás mellett */
+    }
+}
